@@ -25,6 +25,7 @@ KERNEL_URL="https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-${KERNEL_VERSION}
 KERNEL_PATH="/usr/src/kernel"
 
 EXHERBO_HOSTNAME="pogam-_g-exherbo"
+EXHERBO_USERNAME="pogam-_g"
 
 # STEP = 1
 function createPartition {
@@ -113,7 +114,7 @@ function chrootExherbo {
     chmod +x ./Exherbo-Chroot*.sh
     env -i TERM=${TERM} SHELL=/bin/bash HOME=$HOME $(which chroot) "${MOUNT_PATH}" /bin/bash -c \
         "su - -c \"/Exherbo-Chroot.sh ${STEP} ${STOP_STEP} ${KERNEL_VERSION} ${KERNEL_URL} ${KERNEL_PATH} \
-            ${CHECK_DEFAULT_CONF} ${EXHERBO_HOSTNAME}\""
+            ${CHECK_DEFAULT_CONF} ${EXHERBO_HOSTNAME} ${EXHERBO_USERNAME}\""
 }
 
 # STEP = 99

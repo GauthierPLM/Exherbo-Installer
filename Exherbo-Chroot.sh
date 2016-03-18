@@ -12,6 +12,7 @@ KERNEL_URL="$4"
 KERNEL_PATH="$5"
 CHECK_DEFAULT_CONF="$6"
 EXHERBO_HOSTNAME="$7"
+EXHERBO_USERNAME="$8"
 
 # STEP = 6
 function checkExherbo {
@@ -48,17 +49,24 @@ function updateExherbo {
     cave resolve world -c -x
 }
 
+# STEP = 12
+function configUserExherbo {
+    echo "[Info] Choose a root password."
+    passwd root
+    useradd -g users -m -s /bin/bash "${EXHERBO_USERNAME}"
+}
+
 function main {
-    if [ "$#" != 7 ] ; then
+    if [ "$#" != 8 ] ; then
         echo "[Error] Chroot Kernel: usage: <STEP> <STOP_STEP> <KERNEL_VERSION> \
-            <KERNEL_URL> <KERNEL_PATH> <CHECK_DEFAULT_CONF> <EXHERBO_HOSTNAME>."
+            <KERNEL_URL> <KERNEL_PATH> <CHECK_DEFAULT_CONF> <EXHERBO_HOSTNAME> <EXHERBO_USERNAME."
         return
     fi
 
     source /etc/profile
     export PS1="(chroot) $PS1"
 
-    if [ "${STEP}" -le 6 ] && [ "${STOP_STEP}" -ge 6 ] && [ ${CHECK_DEFAULT_CONF} -eq true ]
+    if [ "${STEP}" -le 6 ] && [ "${STOP_STEP}" -ge 6 ] && [ "${CHECK_DEFAULT_CONF}" -eq true ]
     then
         checkExherbo
     fi
@@ -66,14 +74,17 @@ function main {
     # STEP 7 et 8
     /Exherbo-Chroot-Kernel.sh "${STEP}" "${STOP_STEP}" "${KERNEL_VERSION}" "${KERNEL_URL}" "${KERNEL_PATH}"
 
-    if [ ${STEP} -le 9 ] && [ ${STOP_STEP} -ge 9 ] ; then
+    if [ "${STEP}" -le 9 ] && [ "${STOP_STEP}" -ge 9 ] ; then
         stageExherbo
     fi
-    if [ ${STEP} -le 10 ] && [ ${STOP_STEP} -ge 10 ] ; then
+    if [ "${STEP}" -le 10 ] && [ "${STOP_STEP}" -ge 10 ] ; then
         configExherbo
     fi
-    if [ ${STEP} -le 11 ] && [ ${STOP_STEP} -ge 11 ] ; then
+    if [ "${STEP}" -le 11 ] && [ "${STOP_STEP}" -ge 11 ] ; then
         updateExherbo
+    fi
+    if [ "${STEP}" -le 12 ] && [ "${STOP_STEP}" -ge 12 ] ; then
+        configUserExherbo
     fi
 }
 
