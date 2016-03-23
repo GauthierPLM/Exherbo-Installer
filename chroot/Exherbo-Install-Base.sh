@@ -45,7 +45,8 @@ function updateExherbo {
     cave sync
     systemd-machine-id-setup
     cave resolve sys-apps/systemd -x
-    cave resolve linux-firmware
+    cave resolve repository/hardware -x
+    cave resolve linux-firmware -x
     cave resolve world -c -x
 }
 
@@ -53,7 +54,7 @@ function updateExherbo {
 function configUserExherbo {
     echo "[Info] Choose a root password."
     passwd root
-    useradd -g users -m -s /bin/bash "${EXHERBO_USERNAME}"
+    useradd -g users -G adm,disk,wheel,cdrom,video,usb, -m -s /bin/bash "${EXHERBO_USERNAME}"
 }
 
 function main {
@@ -72,7 +73,7 @@ function main {
     fi
 
     # STEP 7 et 8
-    /Exherbo-Chroot-Kernel.sh "${STEP}" "${STOP_STEP}" "${KERNEL_VERSION}" "${KERNEL_URL}" "${KERNEL_PATH}"
+    /Exherbo-Install-Kernel.sh "${STEP}" "${STOP_STEP}" "${KERNEL_VERSION}" "${KERNEL_URL}" "${KERNEL_PATH}"
 
     if [ "${STEP}" -le 9 ] && [ "${STOP_STEP}" -ge 9 ] ; then
         stageExherbo

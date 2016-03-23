@@ -26,13 +26,14 @@ function kernelConfigExherbo {
     cd "${KERNEL_PATH}/linux-${KERNEL_VERSION}/"
     mkdir -p shims
     ln -s -f /usr/host/bin/x86_64-pc-linux-gnu-pkg-config shims/pkg-config
+    curl -O https://raw.githubusercontent.com/Kendos-Kenlen/Kernel-Epitech-2019/master/.config
     PATH=${PWD}/shims:${PATH} make HOSTCC=x86_64-pc-linux-gnu-gcc CROSS_COMPILE=x86_64-pc-linux-gnu- ${CONFIG_TOOL}
 }
 
 # STEP = 8
 function installKernelExherbo {
     cd "${KERNEL_PATH}/linux-${KERNEL_VERSION}/"
-    make HOSTCC=x86_64-pc-linux-gnu-gcc CROSS_COMPILE=x86_64-pc-linux-gnu- CONFIG_TOOL
+    make HOSTCC=x86_64-pc-linux-gnu-gcc CROSS_COMPILE=x86_64-pc-linux-gnu- ${CONFIG_TOOL}
     make HOSTCC=x86_64-pc-linux-gnu-gcc CROSS_COMPILE=x86_64-pc-linux-gnu-
     make HOSTCC=x86_64-pc-linux-gnu-gcc CROSS_COMPILE=x86_64-pc-linux-gnu- modules_install
     cp arch/x86/boot/bzImage /boot/kernel
@@ -46,7 +47,7 @@ function main {
     fi
 
     if [ ${STEP} -le 7 ] && [ ${STOP_STEP} -ge 7 ] ; then
-        kernelConfigExherbo
+       kernelConfigExherbo
     fi
     if [ ${STEP} -le 8 ] && [ ${STOP_STEP} -ge 8 ] ; then
         installKernelExherbo

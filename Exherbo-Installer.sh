@@ -8,14 +8,14 @@ set -o pipefail
 MY_PATH=$(pwd)
 
 STEP=5
-STOP_STEP=7
+STOP_STEP=99
 
 MOUNT_PATH="/mnt/exherbo/"
-ROOT_PARTITION="/dev/sda9"
-HOME_PARTITION="/dev/sda7"
 SWAP_PARTITION="/dev/sda4"
+HOME_PARTITION="/dev/sda7"
+ROOT_PARTITION="/dev/sda9"
 
-FORMAT_HOME=false
+FORMAT_HOME=true
 FORMAT_SWAP=false
 
 CHECK_DEFAULT_CONF=false
@@ -110,10 +110,10 @@ function prepareChrootExherbo {
 function chrootExherbo {
     cd "${MOUNT_PATH}"
     cp /etc/resolv.conf etc/resolv.conf
-    cp ${MY_PATH}/Exherbo-Chroot*.sh ./
-    chmod +x ./Exherbo-Chroot*.sh
+    cp ${MY_PATH}/chroot/Exherbo-Install*.sh ./
+    chmod +x ./Exherbo-*.sh
     env -i TERM=${TERM} SHELL=/bin/bash HOME=$HOME $(which chroot) "${MOUNT_PATH}" /bin/bash -c \
-        "su - -c \"/Exherbo-Chroot.sh ${STEP} ${STOP_STEP} ${KERNEL_VERSION} ${KERNEL_URL} ${KERNEL_PATH} \
+        "su - -c \"/Exherbo-Install-Base.sh ${STEP} ${STOP_STEP} ${KERNEL_VERSION} ${KERNEL_URL} ${KERNEL_PATH} \
             ${CHECK_DEFAULT_CONF} ${EXHERBO_HOSTNAME} ${EXHERBO_USERNAME}\""
 }
 
@@ -122,7 +122,7 @@ function cleanExherbo {
     cd "${MOUNT_PATH}"
     rm exherbo-amd64-current.tar.xz
     rm sha1sum
-    rm Exherbo-Chroot*.sh
+    rm Exherbo-Install*.sh
 }
 
 function main {
