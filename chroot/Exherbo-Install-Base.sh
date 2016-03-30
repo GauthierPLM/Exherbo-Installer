@@ -46,7 +46,8 @@ function updateExherbo {
     systemd-machine-id-setup
     cave resolve sys-apps/systemd -x
     cave resolve repository/hardware -x
-    cave resolve linux-firmware -x
+    cave resolve firmware/linux-firmware -x
+    cave resolve net-wireless/iwlwifi-7260-ucode -x
     cave resolve world -c -x
 }
 

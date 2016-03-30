@@ -7,7 +7,7 @@ set -o pipefail
 
 MY_PATH=$(pwd)
 
-STEP=5
+STEP=0
 STOP_STEP=99
 
 MOUNT_PATH="/mnt/exherbo/"
